@@ -8,11 +8,10 @@ export const Container = styled.View`
     width: 100%;
     height: 100px;
     padding: 0px 20px;
-    /* padding-top: ${statusBarHeight}px; */
+    padding-top: ${statusBarHeight}px;
     justify-content: space-between;
     align-items: center;
 
- */
 `
 
 export const Logo = styled.Image.attrs({

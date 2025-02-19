@@ -1,168 +1,85 @@
-import React from "react";
-import { User } from "../entities/User";
-
+import React, { createContext, useReducer } from "react";
+import authService from "../services/authService.js";
 import * as SecureStore from "expo-secure-store";
 import AsyncStorage from "@react-native-async-storage/async-storage";
-import authService from "../services/authService";
-import { Alert } from "react-native";
 
+export const AuthContext = createContext({});
 
-//Representa o estado de autenticação com as seguintes propriedades
-interface AuthState {
-    user: User | null;
-    token: string | null;
-    isLoading: boolean;
-    isSignout: boolean;
-  }
+const initialState = {
+  user: null,
+  token: null,
+  isLoading: false,
+  isSignout: false,
+};
 
-//Define as possíveis ações que podem ser realizadas no estado
-interface AuthAction {
-    type: "RESTORE_TOKEN" | "SIGN_IN" | "SIGN_OUT";
-    user: User | null;
-    token: string | null;
-  }
-
-//Redutores são funções que atualizam o estado com base em uma ação. Aqui, o authReducer manipula o estado de autenticação:
-  function authReducer(prevState: AuthState, action: AuthAction): AuthState {
-    switch (action.type) {
-      case "RESTORE_TOKEN":
-        return {
-          ...prevState,
-          user: action.user,
-          token: action.token,
-          isLoading: false,
-        };
-      case "SIGN_IN":
-        return {
-          ...prevState,
-          user: action.user,
-          token: action.token,
-          isSignout: false,
-        };
-      case "RESTORE_TOKEN":
-        return {
-          ...prevState,
-          user: null,
-          token: null,
-          isSignout: true,
-        };
-      default:
-        return prevState;
-    }
-  }
-
-  //Estende o estado de autenticação (AuthState) com métodos adicionais
-  interface AuthContextData extends AuthState {
-    register: (
-      name: string,
-      email: string,
-      password: string,
-      phone: string
-    ) => Promise<void>;
-    login: (email: string, password: string) => Promise<void>;
-    logout: () => Promise<void>;
-  }
-
-  //Criação do Contexto
-  export const AuthContext = React.createContext<AuthContextData>(
-    {} as AuthContextData
-  ); 
-
-  export function AuthContextProvider({
-    children,
-  }: {
-    children: React.ReactNode;
-  }) {
-    const [state, dispatch] = React.useReducer(authReducer, {
-      isLoading: true,
-      isSignout: false,
-      token: null,
-      user: null,
-    });
-  
-    React.useEffect(() => {
-      const bootstrapAsync = async () => {
-        let storedToken: string | null = null;
-        let currentUser: User | null = null;
-  
-        try {
-          storedToken = await SecureStore.getItemAsync("onebitshop-token");
-          const userDataString = await AsyncStorage.getItem("current-user");
-          currentUser = userDataString ? JSON.parse(userDataString) : null;
-        } catch (error) {
-          console.log(error);
-        }
-  
-        dispatch({
-          type: "RESTORE_TOKEN",
-          token: storedToken,
-          user: currentUser,
-        });
+function authReducer(prevState, action) {
+  switch (action.type) {
+    case "RESTORE_TOKEN":
+      return {
+        ...prevState,
+        user: action.user,
+        token: action.token,
+        isLoading: false,
       };
-  
-      bootstrapAsync();
-    }, []);
-  
-    const methods = React.useMemo(
-      () => ({
-        logout: async () => {
-          dispatch({
-            type: "SIGN_OUT",
-            token: null,
-            user: null,
-          });
-          await SecureStore.deleteItemAsync("onebitshop-token");
-          await AsyncStorage.removeItem("user");
-        },
-        login: async (email: string, password: string) => {
-          const params = { email, password };
-  
-          const { status, data } = await authService.login(params);
-  
-          if (status === 400 || status === 401) {
-            return;
-          }
-  
-          dispatch({
-            type: "SIGN_IN",
-            token: data.token,
-            user: data.user._id,
-          });
-        },
-        register: async (
-          name: string,
-          email: string,
-          password: string,
-          phone: string
-        ) => {
-          const params = { name, email, password, phone };
-  
-          const loginParams = { email, password };
-  
-          const data = await authService.register(params);
-  
-          if (data.status === 400) {
-            Alert.alert("Email já cadastrado!");
-  
-            return;
-          }
-  
-          dispatch({
-            type: "SIGN_IN",
-            token: data?.data.token,
-            user: data?.data.user._id,
-          });
-  
-          await authService.login(loginParams);
-        },
-      }),
-      []
-    );
-  
-    return (
-      <AuthContext.Provider value={{ ...state, ...methods }}>
-        {children}
-      </AuthContext.Provider>
-    );
+
+    case "SIGN_IN":
+      return {
+        ...prevState,
+        user: action.user,
+        token: action.token,
+        isSignout: false,
+      };
+
+    case "SIGN_OUT":
+      return {
+        ...prevState,
+        user: null,
+        token: null,
+        isSignout: true,
+      };
+
+    default:
+      return prevState;
   }
+}
+
+export function AuthContextProvider({ children }) {
   
+  const [state, dispatch] = useReducer(authReducer, initialState);
+
+  const register = async (name, email, password, phone) => {
+    try {
+      await authService.register({ name, email, password, phone });
+    } catch (error) {
+      console.error("Erro no registro:", error);
+    }
+  };
+
+  const login = async (email, password) => {
+    try {
+      const response = await authService.login({ email, password });
+
+      if (response.status === 200) {
+        dispatch({ type: "SIGN_IN", user: response.data.user, token: response.data.token });
+      }
+    } catch (error) {
+      console.error("Erro no login:", error);
+    }
+  };
+
+  const logout = async () => {
+    try {
+      await SecureStore.deleteItemAsync("onebitshop-token");
+      await AsyncStorage.removeItem("user");
+      dispatch({ type: "SIGN_OUT" });
+    } catch (error) {
+      console.error("Erro no logout:", error);
+    }
+  };
+
+  return (
+    <AuthContext.Provider value={{ ...state, register, login, logout }}>
+      {children}
+    </AuthContext.Provider>
+  );
+}

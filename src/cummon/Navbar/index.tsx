@@ -41,7 +41,7 @@ function Navbar () {
       </IconButton>
       <IconButton
         onPress={() => {
-            router.push("/"); // Rota baseada no arquivo app/home.js ou app/home/index.js
+            router.push("/register"); // Rota baseada no arquivo app/home.js ou app/home/index.js
         }}>
         <Icon source={categories}/>
       </IconButton>

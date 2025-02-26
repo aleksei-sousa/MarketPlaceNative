@@ -1,10 +1,10 @@
 import { Container, Icon, IconButton } from "./styled.js";
 import { router } from "expo-router";
-const home = require('../../../assets/icons/home.png')
-const chat = require('../../../assets/icons/chat.png')
-const add = require("../../../assets/icons/add.png");
-const categories = require("../../../assets/icons/categories.png");
-const profile = require("../../../assets/icons/profile.png");
+const home = require('@/assets/icons/home.png')
+const chat = require('@/assets/icons/chat.png')
+const add = require("@/assets/icons/add.png");
+const categories = require("@/assets/icons/categories.png");
+const profile = require("@/assets/icons/profile.png");
 
 
 function Navbar () {
@@ -41,7 +41,7 @@ function Navbar () {
       </IconButton>
       <IconButton
         onPress={() => {
-            router.push("/register"); // Rota baseada no arquivo app/home.js ou app/home/index.js
+            router.push("/Register"); // Rota baseada no arquivo app/home.js ou app/home/index.js
         }}>
         <Icon source={categories}/>
       </IconButton>

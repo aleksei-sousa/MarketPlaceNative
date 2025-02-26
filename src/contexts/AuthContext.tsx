@@ -71,6 +71,7 @@ export function AuthContextProvider({ children }) {
   const register = async (name, email, password, phone) => {
     try {
       await authService.register({ name, email, password, phone });
+      console.log('auth ok')
     } catch (error) {
       console.error("Erro no registro:", error);
     }

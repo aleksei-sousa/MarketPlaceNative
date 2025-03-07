@@ -42,7 +42,6 @@ function Register() {
         }
     
         register(fields.name, fields.email, fields.password, fields.phone);
-        //console.log('registrado com sucesso')
     
         Alert.alert("Registro feito com sucesso!");
       };

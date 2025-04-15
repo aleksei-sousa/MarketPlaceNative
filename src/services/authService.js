@@ -5,6 +5,7 @@ import AsyncStorage from "@react-native-async-storage/async-storage";
 
 const authService = {
   register: async (params) => {
+    console.log('authService ok', params)
     const res = await api.post("/register", params);
     return res;
   },

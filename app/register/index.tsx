@@ -44,6 +44,8 @@ function Register() {
         register(fields.name, fields.email, fields.password, fields.phone);
     
         Alert.alert("Registro feito com sucesso!");
+
+        //falta redirecionar
       };
 
     return ( 

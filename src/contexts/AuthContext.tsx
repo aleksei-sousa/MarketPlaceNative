@@ -84,6 +84,7 @@ export function AuthContextProvider({ children }) {
 
       if (response.status === 200) {
         const { user, token } = response.data;
+        console.log(user, token)
 
         await SecureStore.setItemAsync("onebitshop-token", token);
         await AsyncStorage.setItem("user", JSON.stringify(user));

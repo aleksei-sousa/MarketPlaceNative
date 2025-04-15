@@ -1,7 +1,6 @@
 import { View, Text, Alert } from "react-native"; 
 import { useState } from "react";
 import { router } from 'expo-router'
-
 import {
     Bold,
     CompanyLogo,
@@ -27,10 +26,11 @@ function Login() {
     password: "",
   });
 
-  //const { login } = useAuth();
+  const { login } = useAuth();
 
   const handleLogin = () => {
-    //login(fields.email, fields.password);
+    login(fields.email, fields.password);
+    Alert.alert("Login feito com Sucesso");
   };
 
     return ( 

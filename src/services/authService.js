@@ -7,6 +7,7 @@ const authService = {
   register: async (params) => {
     console.log('authService ok', params)
     const res = await api.post("/register", params);
+    console.log(res)
     return res;
   },
 

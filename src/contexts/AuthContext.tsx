@@ -56,8 +56,10 @@ export function AuthContextProvider({ children }) {
 
         if (token && user) {
           dispatch({ type: "RESTORE_TOKEN", user, token });
+          console.error("RESTORE_TOKEN" );
         } else {
           dispatch({ type: "SIGN_OUT" });
+          console.error("SIGN_OUT2" );
         }
       } catch (error) {
         console.error("Erro ao restaurar sessão:", error);

@@ -49,6 +49,7 @@ function Navbar () {
       <IconButton
         onPress={() => {
           //!token
+          console.log('33')
           true
           ?
           router.push("/")

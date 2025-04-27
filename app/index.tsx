@@ -15,7 +15,10 @@ function Index() {
   const [products, setProducts] = useState([]);
 
   const handleGetProducts = async () => {
-    if (page === total) return;
+    if (page === total) return console.log('2');
+    // if (page === total) {
+    //   return;
+    // }
 
     const productsData = await productService.getAllProducts(page);
 
@@ -26,11 +29,13 @@ function Index() {
     setPage(page + 1);
   };
 
-  useFocusEffect(
-    React.useCallback(() => {
-      handleGetProducts();
-    }, [])
-  );
+//npm install @react-navigation/core
+useFocusEffect(
+  React.useCallback(() => {
+    handleGetProducts();
+  }, [])
+);
+
 
   return (
     <Container>

@@ -1,4 +1,5 @@
 import React, { useEffect, useState } from "react";
+import { useFocusEffect } from '@react-navigation/native';
 
 import { FlatList } from "react-native";
 import ProductCard from "./ProductCard";

@@ -3,7 +3,7 @@ import { useFocusEffect } from "@react-navigation/native";
 
 import Header from "@/src/components/common/Header";
 import { Container } from '@/src/Styles/Home.styled';
-import Navbar from "@/src/components/common/Navbar";
+import Navbar from "@/src/components/common/NavBar";
 import Loader from "../src/components/common/Loader";
 import ProductList from "@/src/components/common/ProductList";
 import productService from "@/src/services/favoriteService";

@@ -46,6 +46,7 @@ function Register() {
         Alert.alert("Registro feito com sucesso!");
 
         //falta redirecionar
+        router.push('/')
       };
 
     return ( 

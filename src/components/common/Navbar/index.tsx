@@ -5,9 +5,12 @@ const chat = require('@/assets/icons/chat.png')
 const add = require("@/assets/icons/add.png");
 const categories = require("@/assets/icons/categories.png");
 const profile = require("@/assets/icons/profile.png");
+import useAuth from "../../../hook/useAuth";
 
 
 function Navbar () {
+  const { token } = useAuth();
+  console.log(token)
     return ( 
         
     <Container>
@@ -20,40 +23,35 @@ function Navbar () {
 
       <IconButton
         onPress={() => {
-          //!token
-          true
-          ?
-          router.push("/")
-            : router.push("/");
+          !token
+            ?  router.push("/Login")
+            : router.push("/AllChats");
         }}>
         <Icon source={chat}/>
       </IconButton>
 
       <IconButton
         onPress={() => {
-          //!token
-          true
+          !token
           ?
-          router.push("/")
-            : router.push("/");
+          router.push("/Login")
+            : router.push("/AddProduct");
         }}>
         <Icon source={add}/>
       </IconButton>
       <IconButton
         onPress={() => {
-            router.push("/Register"); // Rota baseada no arquivo app/home.js ou app/home/index.js
+            router.push("/Categories");
         }}>
         <Icon source={categories}/>
       </IconButton>
       
       <IconButton
         onPress={() => {
-          //!token
-          console.log('33')
-          true
+          !token
           ?
-          router.push("/")
-            : router.push("/");
+          router.push("/Register")
+            : router.push("/UserProfile");
         }}>
         <Icon source={profile}/>
       </IconButton>

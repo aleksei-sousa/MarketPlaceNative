@@ -1,11 +1,22 @@
 import api from "./api";
 import * as SecureStore from "expo-secure-store";
 
-const favoriteService = {
-  getFavorites: async () => {
+const addressService = {
+  addAddress: async (params) => {
     const token = await SecureStore.getItemAsync("onebitshop-token");
+    const res = await api.post("/addresses", params, {
+      headers: {
+        Accept: "application/json",
+        Authorization: `Bearer ${token}`,
+      },
+    });
 
-    const res = await api.get("/favorites", {
+    return res;
+  },
+
+  getAddress: async () => {
+    const token = await SecureStore.getItemAsync("onebitshop-token");
+    const res = await api.get("/addresses", {
       headers: {
         Authorization: `Bearer ${token}`,
       },
@@ -14,26 +25,9 @@ const favoriteService = {
     return res;
   },
 
-  setFavorite: async (_id) => {
+  deleteAddress: async (_id) => {
     const token = await SecureStore.getItemAsync("onebitshop-token");
-
-    const res = await api.post(
-      "/favorites",
-      { _id },
-      {
-        headers: {
-          Authorization: `Bearer ${token}`,
-        },
-      }
-    );
-
-    return res;
-  },
-
-  delFavorite: async (_id) => {
-    const token = await SecureStore.getItemAsync("onebitshop-token");
-
-    const res = await api.delete(`/favorites/${_id}`, {
+    const res = await api.delete(`/addresses/${_id}`, {
       headers: {
         Authorization: `Bearer ${token}`,
       },
@@ -43,4 +37,4 @@ const favoriteService = {
   },
 };
 
-export default favoriteService;
+export default addressService;

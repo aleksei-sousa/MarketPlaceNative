@@ -31,6 +31,7 @@ function Login() {
   const handleLogin = () => {
     login(fields.email, fields.password);
     Alert.alert("Login feito com Sucesso");
+    router.push('/')
   };
 
     return ( 

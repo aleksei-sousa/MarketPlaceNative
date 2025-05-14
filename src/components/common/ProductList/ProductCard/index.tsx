@@ -13,7 +13,7 @@ import {
   SellerInfoContainer,
   SellerName,
 } from "./styled";
-import getDate from "../../../../utils/getData";
+import getDate from "../../../../utils/getDate";
 import { router } from "expo-router";
 
 //import Like from "../../Like";

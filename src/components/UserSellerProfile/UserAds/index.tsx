@@ -31,7 +31,7 @@ const UserAds = ({ product, seller }) => {
 
     if (res.status === 204) {
       Alert.alert("Produto deletado com sucesso");
-      router.push("/home");
+      router.push("/");
     }
   };
 

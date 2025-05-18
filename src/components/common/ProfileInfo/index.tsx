@@ -16,10 +16,12 @@ import useAuth from "../../../hook/useAuth";
 import getDate from "../../../utils/getData";
 
 const ProfileInfo = ({ userInfo }) => {
+  if (!userInfo) return null; // ← Verifica logo de início
+
   const router = useRouter();
   const { token } = useAuth();
 
-  const Rate = userInfo.avarageRating;
+  const Rate = userInfo.averageRating;
 
   const handleNavigate = () => {
     if (!token) {
@@ -28,8 +30,9 @@ const ProfileInfo = ({ userInfo }) => {
       router.push("/feedback");
     }
   };
- console.log("userInfob:", userInfo);
- if (!userInfo) return null; // ou mostrar um loading
+
+  console.log("userInfob:", userInfo);
+
   return (
     <>
       <Container>
@@ -59,7 +62,6 @@ const ProfileInfo = ({ userInfo }) => {
           )}
         </PrincipalInfoContainer>
 
-        {/* <DefaultText>Usuário desde {getDate(userInfo.createdAt)}</DefaultText> */}
         <DefaultText>
           Usuário desde {userInfo?.createdAt ? getDate(userInfo.createdAt) : "data desconhecida"}
         </DefaultText>
@@ -72,5 +74,6 @@ const ProfileInfo = ({ userInfo }) => {
     </>
   );
 };
+
 
 export default ProfileInfo;

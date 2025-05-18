@@ -61,7 +61,7 @@ const FieldsAbled = ({ userInfo }) => {
         logout();
       }
 
-      router.replace("/(tabs)/home");
+      router.replace("/");
       Alert.alert("Informações atualizadas com sucesso!");
     } catch (err) {
       Alert.alert("Erro ao atualizar informações.");

@@ -2,29 +2,26 @@ import * as SecureStore from "expo-secure-store";
 import api from "./api";
 
 const productService = {
-  addProduct: async (AddProductsParams) => {
+  addProduct: async (params) => {
     const token = await SecureStore.getItemAsync("onebitshop-token");
+    const { name, price, description, category, addressId, images, published } = params;
 
-    const { name, price, description, category, addressId, images, published } =
-      params;
-
-    let formdata = new FormData();
-
+    const formdata = new FormData();
     formdata.append("name", name);
     formdata.append("price", price);
     formdata.append("description", description);
     formdata.append("category", category);
     formdata.append("addressId", addressId);
     formdata.append("published", published);
-    images.map((image) => {
+
+    images.forEach((image) => {
       formdata.append("images", {
-        // @ts-ignore
         name: image.filename,
         uri: image.uri,
         type: image.type,
       });
     });
-
+    console.log("front2")
     const res = await api.post("/products", formdata, {
       headers: {
         Accept: "application/json",
@@ -32,16 +29,16 @@ const productService = {
         Authorization: `Bearer ${token}`,
       },
     });
-
+    console.log(res)
     return res;
   },
-  
-  getAllProducts: async (number) => {
-    const res = await api.get(`/products?page=${page}`);
 
+  getAllProducts: async (page) => {
+    const res = await api.get(`/products?page=${page}`);
     return res.data;
   },
-  updateProduct: async (UpdateParams) => {
+
+  updateProduct: async (params) => {
     const token = await SecureStore.getItemAsync("onebitshop-token");
 
     const res = await api.put(`/products/${params._id}`, params, {
@@ -52,9 +49,9 @@ const productService = {
 
     return res;
   },
-  deleteProduct: async (DeleteParams) => {
-    const token = await SecureStore.getItemAsync("onebitshop-token");
 
+  deleteProduct: async (params) => {
+    const token = await SecureStore.getItemAsync("onebitshop-token");
     const { _id } = params;
 
     const res = await api.delete(`/products/${_id}`, {

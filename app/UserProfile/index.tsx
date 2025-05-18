@@ -33,6 +33,11 @@ const UserProfile = () => {
     handleUserInfos();
   }, []);
 
+  const userLogout = () => {
+    logout()
+    router.replace('/')
+  }
+
   const handleDeleteAcc = () => {
     Alert.alert(
       "Você tem certeza?",
@@ -80,7 +85,7 @@ const UserProfile = () => {
 
         <UserAds product={userInfo.products} seller={false} />
 
-        <LogOutBtn onPress={logout}>
+        <LogOutBtn onPress={userLogout}>
           <LogOutText>Sair da sua conta</LogOutText>
         </LogOutBtn>
 

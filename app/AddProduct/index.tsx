@@ -10,11 +10,9 @@ import {
 } from "@/src/Styles/AddProduct.styled";
 import DefaultTitle from "@/src/components/common/DefaultTitle";
 import DropDownComponent from "@/src/components/common/DropDownComponent";
-import DefaultButton from "../../src/components/common/DefaultButton";
+import DefaultButton from "@/src/components/common/DefaultButton";
 import UploadInput from "@/src/components/AddProduct/UploadInput";
-import { ImagePickerAsset } from "expo-image-picker";
 import addressService from "@/src/services/adressService";
-//import { Address } from "../../src/entities/User";
 import productService from "@/src/services/productService";
 
 const Category = [
@@ -32,13 +30,13 @@ export default function AddProduct() {
   const router = useRouter();
   const [category, setCategory] = useState("");
   const [addressId, setAddressId] = useState("");
-  const [address, setAddress] = useState<{ key: string; value: string }[]>([]);
-  const [images, setImages] = useState<ImagePickerAsset[]>([]);
+  const [address, setAddress] = useState([]);
+  const [images, setImages] = useState([]);
   const [fields, setFields] = useState({
     name: "",
     price: "",
     description: "",
-    images: [{}],
+    images: [],
     category: "",
     addressId: "",
   });
@@ -48,7 +46,7 @@ export default function AddProduct() {
 
     if (res.status === 401) return;
 
-    const value = res.data.map((address: Address) => ({
+    const value = res.data.map((address) => ({
       key: address._id,
       value: `${address.street} Nº ${address.number}`,
     }));
@@ -56,8 +54,15 @@ export default function AddProduct() {
     setAddress(value);
   };
 
-  const handleSubmitProduct = async (post: string) => {
-    if (Object.values(fields).some((value) => !value || !fields.images.length)) {
+  const handleSubmitProduct = async (post) => {
+    if (
+      !fields.name ||
+      !fields.price ||
+      !fields.description ||
+      !category ||
+      !addressId ||
+      images.length === 0
+    ) {
       Alert.alert("Um dos seus campos está vazio");
       return;
     }
@@ -68,7 +73,7 @@ export default function AddProduct() {
         filename: uri.substring(uri.lastIndexOf("/") + 1),
         uri,
         url: "",
-        type: `image/${uri.split(".").slice(-1).toString()}`,
+        type: `image/${uri.split(".").pop()}`,
       })),
       published: post,
     };
@@ -77,13 +82,13 @@ export default function AddProduct() {
 
     if (status === 201) {
       Alert.alert("Seu produto foi cadastrado com sucesso!");
-      router.push("/"); // Voltar para Home
+      router.push("/");
     }
   };
 
   useEffect(() => {
-    setFields((prevFields) => ({
-      ...prevFields,
+    setFields((prev) => ({
+      ...prev,
       images,
       category,
       addressId,
@@ -102,9 +107,7 @@ export default function AddProduct() {
         <Input
           placeholder="Título"
           value={fields.name}
-          onChangeText={(val) =>
-            setFields((prev) => ({ ...prev, name: val }))
-          }
+          onChangeText={(val) => setFields((prev) => ({ ...prev, name: val }))}
         />
       </InputContainer>
 
@@ -113,9 +116,7 @@ export default function AddProduct() {
           placeholder="Preço"
           keyboardType="numeric"
           value={fields.price}
-          onChangeText={(val) =>
-            setFields((prev) => ({ ...prev, price: val }))
-          }
+          onChangeText={(val) => setFields((prev) => ({ ...prev, price: val }))}
         />
       </InputContainer>
 

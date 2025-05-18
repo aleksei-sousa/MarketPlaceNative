@@ -63,7 +63,7 @@ const AddAddress = () => {
 
       if (data.status === 201) {
         router.push({
-          pathname: "/all-address",  // ← ajuste o caminho correto da sua tela de endereços
+          pathname: "/alladdress",  // ← ajuste o caminho correto da sua tela de endereços
           params: { newAddress: true },
         });
       }

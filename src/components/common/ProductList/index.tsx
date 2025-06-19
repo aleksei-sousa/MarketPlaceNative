@@ -1,9 +1,8 @@
-import React, { useEffect, useState } from "react";
-import { useFocusEffect } from '@react-navigation/native';
+import React, { useState } from "react";
+import { FlatList, Text } from "react-native";
+import { useFocusEffect } from "@react-navigation/native";
 
-import { FlatList } from "react-native";
 import ProductCard from "./ProductCard";
-
 import useAuth from "../../../hook/useAuth";
 import favoriteService from "../../../services/favoriteService.js";
 
@@ -14,15 +13,17 @@ const ProductList = ({ products, handleGetProducts }) => {
   const handleGetFavorites = async () => {
     if (!token) return;
 
-    const res = await favoriteService.getFavorites();
-
-    const isLiked = res.data.map((val) => val._id);
-
-    setFavorites(isLiked);
+    try {
+      const res = await favoriteService.getFavorites();
+      const isLiked = Array.isArray(res.data) ? res.data.map(val => val._id) : [];
+      setFavorites(isLiked);
+    } catch (err) {
+      console.warn("Erro ao buscar favoritos:", err);
+    }
   };
 
   const isFavorite = (product) => {
-    return !!favorites.find((favorite) => product._id === favorite);
+    return favorites.includes(product._id);
   };
 
   const renderItem = ({ item }) => (
@@ -31,18 +32,23 @@ const ProductList = ({ products, handleGetProducts }) => {
 
   useFocusEffect(
     React.useCallback(() => {
+      handleGetFavorites();
       handleGetProducts();
-    }, [])
+    }, [token])
   );
+
 
   return (
     <FlatList
       data={products}
-      keyExtractor={(item) => item._id}
+      keyExtractor={(item) => item._id?.toString() || Math.random().toString()}
       renderItem={renderItem}
       showsVerticalScrollIndicator={false}
-      contentContainerStyle={{ paddingBottom: 80 }}
+      contentContainerStyle={{ paddingBottom: 80, paddingHorizontal: 16 }}
       onEndReached={handleGetProducts}
+      onEndReachedThreshold={0.1}
+      initialNumToRender={5}
+      ListEmptyComponent={<Text style={{ textAlign: "center", marginTop: 20 }}>Nenhum produto encontrado</Text>}
     />
   );
 };

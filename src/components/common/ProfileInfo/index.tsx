@@ -31,7 +31,7 @@ const ProfileInfo = ({ userInfo }) => {
     }
   };
 
-  console.log("userInfob:", userInfo);
+  //console.log("userInfob:", userInfo);
 
   return (
     <>

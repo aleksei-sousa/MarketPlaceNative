@@ -10,20 +10,21 @@ import {
   Title,
 } from "./styled";
 import Like from "@/src/components/common/Like"; // ou onde o Like estiver
+import Constants from 'expo-constants';
+const baseUrl = Constants.expoConfig?.extra?.DATA_BASE_URL || "";
+
 
 const CategoryCard = ({ product, favorite }) => {
   const router = useRouter();
 
   const handlePress = () => {
-    router.push({
-      pathname: '/product/[id]',
-      params: { id: product._id },
-    });
+    router.push(`/product/${product._id}`);
   };
+  //console.log(product.images)
 
   return (
     <Container onPress={handlePress}>
-      <Image source={{ uri: product.images[0].url }} />
+      <Image source={{ uri: baseUrl + product.images[0].url }} />
       <TextContainer>
         <Title>{product.name}</Title>
         <Price>R$ {product.price}</Price>

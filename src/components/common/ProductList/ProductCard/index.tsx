@@ -13,31 +13,38 @@ import {
   SellerInfoContainer,
   SellerName,
 } from "./styled";
-import getDate from "../../../../utils/getDate";
-import { router } from "expo-router";
+import getDate from "../../../../utils/getData";
 
 //import Like from "../../Like";
 //const like = require("../../../../../assets/icons/like.png");
 //const liked = require("../../../../../assets/icons/liked.png");
+import Constants from 'expo-constants';
+const baseUrl = Constants.expoConfig.extra.DATA_BASE_URL;
+console.log(baseUrl)
 
-function ProductCard({data, favorite}) {
-  return ( 
-    <Container
-      activeOpacity={0.85}
-      onPress={() => {
-        router.push({
-            pathname: "/Product",
-            params: {
-              id: data.id,
-            },
-          });
-      }}
-    >
-      {/* <ProductImage
-        source={{
-          uri: data.images[0].url,
-        }}
-      />
+//console.log(baseUrl)
+import { Alert } from "react-native";
+import { useRouter } from "expo-router";
+
+
+import Like from "../../Like";
+
+const ProductCard = ({ data, favorite }) => {
+  const router = useRouter();
+
+  const handlePress = () => {
+    //return console.log(data)
+    router.push({
+      pathname: "/Product", // ou /product/[id] se for dinâmica
+    params: {
+        product: JSON.stringify(data), // <- aqui você serializa o objeto
+      },
+    });
+
+  };
+  return (
+    <Container activeOpacity={0.85} onPress={handlePress}>
+      <ProductImage source={{ uri: baseUrl + data.images[0]?.url }} />
       <ProductInfoContainer>
         <ProductPriceTitleContainer>
           <ProductPrice>R$ {data.price}</ProductPrice>
@@ -52,9 +59,9 @@ function ProductCard({data, favorite}) {
           </SellerInfoContainer>
           <Like favorites={favorite} productId={data._id} />
         </InfoLikeContainer>
-      </ProductInfoContainer> */}
+      </ProductInfoContainer>
     </Container>
   );
-}
+};
 
 export default ProductCard;

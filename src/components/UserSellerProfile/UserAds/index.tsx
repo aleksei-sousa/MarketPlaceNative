@@ -17,7 +17,7 @@ import {
 import { useRouter } from "expo-router";
 import { Alert } from "react-native";
 
-import getDate from "../../../utils/getDate";
+import getDate from "../../../utils/getData";
 import productService from "../../../services/productService";
 
 const trashIcon = require("@/assets/icons/trash.png");

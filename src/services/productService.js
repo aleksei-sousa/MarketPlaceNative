@@ -21,7 +21,6 @@ const productService = {
         type: image.type,
       });
     });
-    console.log("front2")
     const res = await api.post("/products", formdata, {
       headers: {
         Accept: "application/json",
@@ -29,7 +28,7 @@ const productService = {
         Authorization: `Bearer ${token}`,
       },
     });
-    console.log(res)
+    //console.log(res)
     return res;
   },
 

@@ -20,13 +20,31 @@ import Loader from "@/src/components/common/Loader";
 const UserProfile = () => {
   const router = useRouter();
   const [userInfo, setUserInfo] = useState(null);
+  const [loading, setLoading] = useState(true);
 
   const { logout } = useAuth();
 
   const handleUserInfos = async () => {
-    const { data } = await profileService.getUserProfile();
-    console.log(data)
-    setUserInfo(data);
+    try {
+      const { data } = await profileService.getUserProfile();
+      console.log("userInfo:", data);
+
+      // se o token estiver inválido ou não for objeto
+      if (!data || data.error) {
+        console.warn("Token inválido ou erro ao buscar dados:", data?.error);
+        logout();
+        router.replace("/");
+        return;
+      }
+
+      setUserInfo(data);
+    } catch (err) {
+      console.error("Erro ao buscar perfil:", err);
+      logout();
+      router.replace("/");
+    } finally {
+      setLoading(false);
+    }
   };
 
   useEffect(() => {
@@ -34,9 +52,9 @@ const UserProfile = () => {
   }, []);
 
   const userLogout = () => {
-    logout()
-    router.replace('/')
-  }
+    logout();
+    router.replace("/");
+  };
 
   const handleDeleteAcc = () => {
     Alert.alert(
@@ -64,11 +82,9 @@ const UserProfile = () => {
     });
   };
 
-  if (!userInfo) {
-    return <Loader />;
-  }
+  if (loading) return <Loader />;
 
-
+  if (!userInfo) return null;
 
   return (
     <>
@@ -83,7 +99,7 @@ const UserProfile = () => {
           Gerenciar Endereços
         </AddressText>
 
-        <UserAds product={userInfo.products} seller={false} />
+        <UserAds product={userInfo.products || []} seller={false} />
 
         <LogOutBtn onPress={userLogout}>
           <LogOutText>Sair da sua conta</LogOutText>

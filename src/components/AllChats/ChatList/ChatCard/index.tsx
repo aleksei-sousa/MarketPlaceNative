@@ -15,7 +15,7 @@ import {
   SellerTrashContainer,
 } from "./styled";
 import { useNavigation } from "@react-navigation/native";
-import getDate from "../../../../utils/getDate";
+import getDate from "../../../../utils/getData";
 
 const trashIcon = require("@/assets/icons/trash.png");
 

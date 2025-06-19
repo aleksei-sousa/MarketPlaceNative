@@ -56,10 +56,10 @@ export function AuthContextProvider({ children }) {
 
         if (token && user) {
           dispatch({ type: "RESTORE_TOKEN", user, token });
-          console.error("RESTORE_TOKEN" );
+          //console.error("RESTORE_TOKEN" );
         } else {
           dispatch({ type: "SIGN_OUT" });
-          console.error("SIGN_OUT2" );
+          //console.error("SIGN_OUT2" );
         }
       } catch (error) {
         console.error("Erro ao restaurar sessão:", error);
@@ -86,7 +86,7 @@ export function AuthContextProvider({ children }) {
 
       if (response.status === 200) {
         const { user, token } = response.data;
-        console.log(user, token)
+       // console.log(user, token)
 
         await SecureStore.setItemAsync("onebitshop-token", token);
         await AsyncStorage.setItem("user", JSON.stringify(user));

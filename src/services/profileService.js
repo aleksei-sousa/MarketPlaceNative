@@ -12,11 +12,12 @@ const getAuthHeaders = async () => {
 const profileService = {
   getUserProfile: async () => {
     const user = await AsyncStorage.getItem("user");
+    console.log(user)
     const parsedUser = JSON.parse(user || "{}");
 
     const headers = await getAuthHeaders();
     const res = await api.get(`/users/${parsedUser._id}`, { headers });
-
+    console.log(res)
     return res;
   },
 

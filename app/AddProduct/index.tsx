@@ -46,10 +46,17 @@ export default function AddProduct() {
 
     if (res.status === 401) return;
 
-    const value = res.data.map((address) => ({
-      key: address._id,
-      value: `${address.street} Nº ${address.number}`,
-    }));
+    const value = res.data
+      .filter((address) => address._id != null)
+      .map((address) => ({
+        key: address._id,
+        value: `${address.street} Nº ${address.number}`,
+      }));
+
+    // const value = res.data.map((address) => ({
+    //   key: address._id,
+    //   value: `${address.street} Nº ${address.number}`,
+    // }));
 
     setAddress(value);
   };

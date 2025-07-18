@@ -30,13 +30,14 @@ import chatService from "@/src/services/chatService";
 const shareIcon = require("@/assets/icons/share.png");
 
 const Product = () => {
+
   const [liked, setLiked] = useState(false);
   const { token } = useAuth();
   const router = useRouter();
 
-const { product: productString } = useLocalSearchParams();
-const product = JSON.parse(productString || "{}");
-console.log(product)
+  const { product: productString } = useLocalSearchParams();
+  const product = JSON.parse(productString || "{}");
+  console.log(product)
 
   const handleGetFavorites = async () => {
     if (!token) return;

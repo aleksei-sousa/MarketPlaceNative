@@ -33,7 +33,7 @@ const ProductCard = ({ data, favorite }) => {
   const router = useRouter();
 
   const handlePress = () => {
-    //return console.log(data)
+    return console.log(data)
     router.push({
       pathname: "/Product", // ou /product/[id] se for dinâmica
     params: {

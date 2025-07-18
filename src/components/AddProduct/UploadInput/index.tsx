@@ -5,14 +5,28 @@ import { Alert } from "react-native";
 const uploadIcon = require("../../../../assets/icons/arrow-right.png");
 
 export default function UploadInput({ images, setImages }) {
+
   const handlePickUpImage = async () => {
-    let result = await ImagePicker.launchImageLibraryAsync({
-      mediaTypes: ImagePicker.MediaTypeOptions.Images,
+    console.log('gg')
+    //let result = await ImagePicker.launchImageLibraryAsync({
+      //mediaTypes: ImagePicker.MediaTypeOptions.Images,
+      // mediaTypes: [ImagePicker.MediaType.Image],
+
+
+      // allowsMultipleSelection: true,
+      // selectionLimit: 6,
+      // aspect: [4, 3],
+      // quality: 1,
+          let result = await ImagePicker.launchImageLibraryAsync({
+      mediaTypes: ['images', 'videos'],
+      allowsEditing: true,
       allowsMultipleSelection: true,
-      selectionLimit: 6,
       aspect: [4, 3],
       quality: 1,
     });
+
+
+    //});
 
     if (result.assets) {
       const selectedImages = result.assets.slice(0, 6);
@@ -20,7 +34,7 @@ export default function UploadInput({ images, setImages }) {
       if (result.assets.length > 6) {
         Alert.alert("Removemos as imagens adicionais. Limite de 6 imagens.");
       }
-
+      console.log(selectedImages)
       setImages(selectedImages);
     } else {
       Alert.alert("Você não selecionou imagens");
@@ -36,7 +50,7 @@ export default function UploadInput({ images, setImages }) {
       <ImageContainer>
         {images &&
           images.map((image) => (
-            <Image key={image.assetId} source={{ uri: image.uri }} />
+            <Image key={image.uri} source={{ uri: image.uri }} />
           ))}
       </ImageContainer>
     </>

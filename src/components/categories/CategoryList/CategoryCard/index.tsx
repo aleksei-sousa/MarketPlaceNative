@@ -19,6 +19,7 @@ const CategoryCard = ({ product, favorite }) => {
 
   const handlePress = () => {
     router.push(`/product/${product._id}`);
+    console.log(product._id)
   };
   //console.log(product.images)
 
